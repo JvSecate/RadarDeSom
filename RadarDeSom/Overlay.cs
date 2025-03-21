@@ -34,7 +34,8 @@ namespace RadarDeSom
 			base.Opacity = 0.7;
 			FileIniDataParser parser = new FileIniDataParser();
 			IniData data = parser.ReadFile(AppDomain.CurrentDomain.BaseDirectory + "settings.ini");
-			this._multiplier = int.Parse(data["basic"]["multiplier"]);
+            this.RadarBox.Location = new System.Drawing.Point(int.Parse(data["basic"]["positionX"]), int.Parse(data["basic"]["positionY"]));
+            this._multiplier = int.Parse(data["basic"]["multiplier"]);
 			this._updateRate = int.Parse(data["basic"]["updateRate"]);
 			this._delay = int.Parse(data["basic"]["delay"]);
 			this._sectionAmount = int.Parse(data["sectionHighlights"]["sectionAmount"]);
