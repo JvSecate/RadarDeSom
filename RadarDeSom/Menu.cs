@@ -55,5 +55,10 @@ namespace RadarDeSom
             }
             base.OnFormClosing(e);
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/JvSecate/RadarDeSom/blob/master/README.md");
+        }
     }
 }

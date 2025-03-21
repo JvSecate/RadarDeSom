@@ -1,4 +1,9 @@
 # RadarDeSom
+Utilizado para detecção da direção de som.
+Suporta dispositivos de som Estereos e Surround 7.1.
+
+Tambem suporta dispositivos Surround 7.1 Virtuais. \
+Ex: Voicemeeter e VB-Cable
 
 ## Configuração do Voicemeeter Banana (Recomendado)
 
@@ -19,7 +24,7 @@
 
 ---
 
-## Configuração do VB Cable (Alternativa)
+## Configuração do VB-Cable (Alternativa)
 
 1. Baixe o [VB-Cable](https://www.vb-audio.com/Cable/)  
 2. Instale o programa  
