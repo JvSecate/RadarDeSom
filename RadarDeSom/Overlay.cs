@@ -19,11 +19,32 @@ namespace RadarDeSom
 		private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 		private DateTime[] lastHighlightedTimestamps = new DateTime[12];
 
-		public Overlay()
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+	
+        public bool ModoMovimento { get; set; } = false;
+
+        public Overlay()
 		{
 			this.InitializeComponent();
-		}
-		private void Overlay_Load(object sender, EventArgs e)
+            this.ClientSize = RadarBox.Size;
+            RadarBox.Location = new Point(0, 0);
+        }
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (ModoMovimento && e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(this.Handle, 0xA1, 0x2, 0); // 0xA1 = WM_NCLBUTTONDOWN, 0x2 = HTCAPTION
+            }
+
+            base.OnMouseDown(e);
+        }
+
+        private void Overlay_Load(object sender, EventArgs e)
 		{
 			base.TransparencyKey = Color.Turquoise;
 			this.BackColor = Color.Turquoise;
@@ -41,7 +62,7 @@ namespace RadarDeSom
 			this._sectionAmount = int.Parse(data["sectionHighlights"]["sectionAmount"]);
 			this._highlightDurationSeconds = int.Parse(data["sectionHighlights"]["highlightDurationSeconds"]);
 			this._highlightSoundThreshold = int.Parse(data["sectionHighlights"]["highlightSoundThreshold"]);
-			Thread t = new Thread(new ThreadStart(this.Loop));
+            Thread t = new Thread(new ThreadStart(this.Loop));
 			t.Start();
 		}
 

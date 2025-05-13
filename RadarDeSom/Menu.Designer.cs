@@ -23,6 +23,7 @@
             button1 = new Button();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
+            button3 = new Button();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -54,6 +55,7 @@
             // groupBox3
             // 
             groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox3.Controls.Add(button3);
             groupBox3.Controls.Add(button4);
             groupBox3.Controls.Add(button2);
             groupBox3.Controls.Add(button1);
@@ -110,6 +112,16 @@
             toolStripStatusLabel1.Size = new Size(73, 17);
             toolStripStatusLabel1.Text = "Exibir Versão";
             // 
+            // button3
+            // 
+            button3.Location = new Point(201, 22);
+            button3.Name = "button3";
+            button3.Size = new Size(87, 27);
+            button3.TabIndex = 4;
+            button3.Text = "Mover";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
+            // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -141,5 +153,6 @@
         private global::System.Windows.Forms.Button button1;
         private global::System.Windows.Forms.StatusStrip statusStrip1;
         private global::System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private Button button3;
     }
 }

@@ -60,5 +60,32 @@ namespace RadarDeSom
         {
             Process.Start("explorer.exe", "https://github.com/JvSecate/RadarDeSom/blob/master/README.md");
         }
+
+        private bool radarTravado = true;
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            if (overlay == null || overlay.IsDisposed)
+            {
+                MessageBox.Show("O radar ainda não foi iniciado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            radarTravado = !radarTravado;
+            overlay.ModoMovimento = !radarTravado;
+
+            if (radarTravado)
+            {
+                button3.Text = "Mover";
+                overlay.FormBorderStyle = FormBorderStyle.None;
+                overlay.TopMost = true;
+            }
+            else
+            {
+                button3.Text = "Fixar";
+                overlay.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+                overlay.WindowState = FormWindowState.Normal;
+                overlay.TopMost = false;
+            }
+        }
     }
 }
