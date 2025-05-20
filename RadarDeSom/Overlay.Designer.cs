@@ -34,10 +34,11 @@ namespace RadarDeSom
             // 
             // RadarBox
             // 
-            RadarBox.Location = new Point(13, 12);
-            RadarBox.Margin = new Padding(4, 3, 4, 3);
+            RadarBox.Dock = DockStyle.Fill;
+            RadarBox.Location = new Point(0, 0);
+            RadarBox.Margin = new Padding(0);
             RadarBox.Name = "RadarBox";
-            RadarBox.Size = new Size(175, 173);
+            RadarBox.Size = new Size(200, 174);
             RadarBox.TabIndex = 0;
             RadarBox.TabStop = false;
             // 
@@ -46,7 +47,7 @@ namespace RadarDeSom
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(200, 198);
+            ClientSize = new Size(200, 174);
             Controls.Add(RadarBox);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");

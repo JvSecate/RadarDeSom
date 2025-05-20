@@ -75,6 +75,7 @@ namespace RadarDeSom
 
             if (radarTravado)
             {
+                //MessageBox.Show(string.Format("a {0}, b {1}", overlay.Width, overlay.Height), "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 button3.Text = "Mover";
                 overlay.FormBorderStyle = FormBorderStyle.None;
                 overlay.TopMost = true;
@@ -84,6 +85,9 @@ namespace RadarDeSom
                 button3.Text = "Fixar";
                 overlay.FormBorderStyle = FormBorderStyle.SizableToolWindow;
                 overlay.WindowState = FormWindowState.Normal;
+                overlay.Width = 167;
+                overlay.Height = 190;
+                
                 overlay.TopMost = false;
             }
         }
