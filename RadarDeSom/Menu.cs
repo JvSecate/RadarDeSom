@@ -87,9 +87,14 @@ namespace RadarDeSom
                 overlay.WindowState = FormWindowState.Normal;
                 overlay.Width = 167;
                 overlay.Height = 190;
-                
+
                 overlay.TopMost = false;
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
