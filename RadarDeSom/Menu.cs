@@ -31,29 +31,16 @@ namespace RadarDeSom
             }
         }
 
-        private void Button3_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Texto", "aaaa", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.toolStripStatusLabel1.Text = string.Format("Versão: {0}", Assembly.GetExecutingAssembly().GetName().Version);
+            this.toolStripStatusLabel1.Text = string.Format("Version: {0}", 
+                Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + "settings.ini";
-            Process.Start("notepad.exe", filePath);
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            if (overlay != null && !overlay.IsDisposed)
-            {
-                overlay.Close();
-            }
-            base.OnFormClosing(e);
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.ini");
+            Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -62,11 +49,11 @@ namespace RadarDeSom
         }
 
         private bool radarTravado = true;
-        private void button3_Click_1(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
             if (overlay == null || overlay.IsDisposed)
             {
-                MessageBox.Show("O radar ainda não foi iniciado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("O radar ainda não foi iniciado.\nThe radar has not been started yet.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -75,7 +62,6 @@ namespace RadarDeSom
 
             if (radarTravado)
             {
-                //MessageBox.Show(string.Format("a {0}, b {1}", overlay.Width, overlay.Height), "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 button3.Text = "Mover";
                 overlay.FormBorderStyle = FormBorderStyle.None;
                 overlay.TopMost = true;
@@ -94,7 +80,13 @@ namespace RadarDeSom
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            if (overlay != null) overlay.Close();
             this.Close();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Desenvolvido para o projeto: Representação Visual De Som Espacial Em Jogos Para Deficientes Auditivos.\r\n\nDeveloped for the project: Visual Representation of spatial sound in games for the hearing impaired\r\n\nDesenvolvedores | Developers: \r\n     João Victor do Nascimento Secate\r\n     Sofia de Moura Feitosa Bressa\r\n\nOrientador do projeto | Project Advisor:  \r\n     Rogério Pinto Alexandre\r\n\nBaseado em | Based on:\r\n     Canetis Radar\r\n", "Credits", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

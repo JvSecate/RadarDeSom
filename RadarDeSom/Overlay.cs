@@ -27,12 +27,32 @@ namespace RadarDeSom
 
         public bool ModoMovimento { get; set; } = false;
 
+        private volatile bool _isRunning = true;
+        private Thread _workerThread;
+
         public Overlay()
         {
             this.InitializeComponent();
             this.ClientSize = RadarBox.Size;
             RadarBox.Location = new Point(0, 0);
         }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            _isRunning = false;
+
+            if (_workerThread != null && _workerThread.IsAlive)
+            {
+                _workerThread.Join(1000); // max wait 1 second
+            }
+
+            _device?.Dispose();
+            _enumerator?.Dispose();
+
+            base.OnFormClosing(e);
+
+            Environment.Exit(0);  // hard kill
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (ModoMovimento && e.Button == MouseButtons.Left)
@@ -62,8 +82,8 @@ namespace RadarDeSom
             this._sectionAmount = int.Parse(data["sectionHighlights"]["sectionAmount"]);
             this._highlightDurationSeconds = int.Parse(data["sectionHighlights"]["highlightDurationSeconds"]);
             this._highlightSoundThreshold = int.Parse(data["sectionHighlights"]["highlightSoundThreshold"]);
-            Thread t = new Thread(new ThreadStart(this.Loop));
-            t.Start();
+            _workerThread = new Thread(new ThreadStart(this.Loop));
+            _workerThread.Start();
         }
 
         //Loop Inicial
@@ -74,7 +94,7 @@ namespace RadarDeSom
             bool flag = this._device.AudioMeterInformation.PeakValues.Count < 8;
             if (flag)
             {
-                if (MessageBox.Show("O dispositivo de áudio utilizado não é 7.1, conecte um dispositivo compatível ou verifique o tutorial para utilizar. Deseja continuar para o modo estéreo?", "Audio 7.1 Não Detectado!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("O dispositivo de áudio utilizado não é 7.1. Deseja continuar para o modo estéreo?\nThe audio device in use is not 7.1. Do you want to continue in stereo mode?", "Audio 7.1 Não Detectado!", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     StereoOverlay();
                 }
@@ -133,7 +153,6 @@ namespace RadarDeSom
                 {
                     x = 140f;
                 }
-                //this.CreateRadar((int)x, (int)y, (int)idx);
                 this.CreateRadarTriangle((int)x, (int)y, (int)idx);
                 Thread.Sleep(this._updateRate);
             }
@@ -155,7 +174,7 @@ namespace RadarDeSom
             Graphics grp = Graphics.FromImage(this._radar);
             grp.FillRectangle(Brushes.Black, 0, 0, this._radar.Width, this._radar.Height);
 
-            for (; ; )
+            while (_isRunning)
             {
                 leftTop[idx] = this._device.AudioMeterInformation.PeakValues[0];
                 rightTop[idx] = this._device.AudioMeterInformation.PeakValues[1];
@@ -198,7 +217,6 @@ namespace RadarDeSom
                 {
                     x = 140f;
                 }
-                //this.CreateRadar((int)x, (int)y, (int)idx);
                 this.CreateRadarTriangle((int)x, (int)y, (int)idx);
                 Thread.Sleep(this._updateRate);
             }
@@ -257,11 +275,23 @@ namespace RadarDeSom
 
             grp.FillRectangle(Brushes.Red, x - 5, y - 5, 10, 10);
 
-			this.RadarBox.Invoke(new MethodInvoker(delegate ()
+            if (RadarBox != null &&
+                !RadarBox.IsDisposed &&
+                RadarBox.IsHandleCreated)
+            {
+                try
                 {
-				this.RadarBox.Image = this._radar;
-                }));
+                    RadarBox.Invoke(new MethodInvoker(delegate ()
+                    {
+                        RadarBox.Image = _radar;
+                    }));
+                }
+                catch (InvalidAsynchronousStateException)
+                {
+                    this.Close();
+                }
             }
+        }
         private Point GetIntersectionPoint(Point p1, Point p2)
         {
             float t;
@@ -298,7 +328,6 @@ namespace RadarDeSom
         }
         private MMDeviceEnumerator _enumerator;
         private MMDevice _device;
-
 
         private int _multiplier = 500;
         private int _updateRate = 50;
